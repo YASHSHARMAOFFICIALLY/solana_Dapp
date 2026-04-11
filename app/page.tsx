@@ -50,7 +50,7 @@ function TopBar() {
         <div className="flex items-center gap-2">
           {!publicKey ? <WalletMultiButton /> : <WalletDisconnectButton />}
           <a
-            href="https://github.com/yashsharma"
+            href="https://github.com/YASHSHARMAOFFICIALLY/Solana-Dapp"
             target="_blank"
             rel="noopener noreferrer"
             className="w-9 h-9 rounded-lg border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-100 transition cursor-pointer"
