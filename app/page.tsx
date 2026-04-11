@@ -7,11 +7,12 @@ import {
     WalletMultiButton
 } from '@solana/wallet-adapter-react-ui';
 import { LAMPORTS_PER_SOL, PublicKey, SystemProgram, Transaction } from '@solana/web3.js';
+import {TOKEN_PROGRAM_ID} from "@solana/spl-token"
 
 
 
 export default function Home() {
-  const endpoint = "https://mainnet.helius-rpc.com/?api-key=42334ea9-9808-4b7a-b697-43e53515823e";
+  const endpoint = "https://api.devnet.solana.com";
   return (
     <ConnectionProvider endpoint={endpoint}>
       <WalletProvider wallets={[]} autoConnect>
@@ -70,18 +71,50 @@ function TopBar() {
 function Portfolio() {
   const { connection } = useConnection();
   const { publicKey } = useWallet();
+  const[tokens,setTokens]= useState<any[]>([])
   const [balance, setBalance] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (publicKey) {
-      setLoading(true);
-      connection.getBalance(publicKey)
-        .then(bal => setBalance(bal))
-        .finally(() => setLoading(false));
-    } else {
+
+    if(!publicKey){
       setBalance(null);
+      setTokens([]);
+      return;
     }
+
+    const fetchData = async() =>{
+     try{
+      setLoading(true)
+
+      const bal = await connection.getBalance(publicKey);
+      setBalance(bal)
+
+      const tokenAccounts = await connection.getParsedTokenAccountsByOwner(publicKey,{
+        programId:TOKEN_PROGRAM_ID,
+      })
+
+       const parsedTokens = tokenAccounts.value.map((acc) => {
+        const info = acc.account.data.parsed.info;
+        return {
+          mint: info.mint,
+          amount: info.tokenAmount.uiAmount,
+          decimals: info.tokenAmount.decimals,
+        };
+      });
+       setTokens(parsedTokens)
+
+
+
+     }catch(err){
+      console.log("Error fetching wallet data",err)
+     }finally{
+      setLoading(false)
+     }
+      
+    };
+    fetchData();
+    
   }, [publicKey, connection]);
 
   if (!publicKey) {
