@@ -102,6 +102,7 @@ function Portfolio() {
           decimals: info.tokenAmount.decimals,
         };
       });
+       console.log("Token accounts:", parsedTokens)
        setTokens(parsedTokens)
 
 
@@ -144,6 +145,25 @@ function Portfolio() {
             {solBalance !== null ? solBalance.toFixed(4) : "\u2014"}
           </span>
           <span className="text-sm text-gray-400 font-medium">SOL</span>
+        </div>
+      )}
+
+      {/* Token List */}
+      {tokens.length > 0 && (
+        <div className="mt-6 border-t border-gray-200 pt-4">
+          <span className="text-sm font-medium text-gray-500">Tokens</span>
+          <div className="mt-3 space-y-3">
+            {tokens.map((token) => (
+              <div key={token.mint} className="flex items-center justify-between">
+                <span className="text-xs font-mono text-gray-500 truncate max-w-48">
+                  {token.mint}
+                </span>
+                <span className="text-sm font-semibold text-gray-900">
+                  {token.amount ?? 0}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </div>
