@@ -19,7 +19,6 @@ type TokenInfo = {
 function Portfolio() {
   const { connection } = useConnection();
   const { publicKey } = useWallet();
-
   const [tokens, setTokens] = useState<Token[]>([]);
   const [tokenMap, setTokenMap] = useState<Record<string, TokenInfo>>({});
   const [balance, setBalance] = useState<number | null>(null);
