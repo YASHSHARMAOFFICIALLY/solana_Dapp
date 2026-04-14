@@ -1,94 +1,51 @@
-# Solana Wallet DApp
+# <img src="./app/favicon.ico" width="28" alt="Solana DApp icon" /> Solana DApp
 
-![Next.js](https://img.shields.io/badge/Next.js-16.2.1-000000?logo=nextdotjs&logoColor=white)
-![React](https://img.shields.io/badge/React-19.2.4-61DAFB?logo=react&logoColor=111111)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.x-06B6D4?logo=tailwindcss&logoColor=white)
-![Solana](https://img.shields.io/badge/Solana-Wallet_Adapter-14F195?logo=solana&logoColor=111111)
+A professional Solana wallet dashboard built with Next.js, TypeScript, and Solana wallet adapters. The app connects to Solana Devnet, displays wallet balances and SPL token holdings, and supports sending SOL or SPL tokens from a connected wallet.
 
-A modern Solana wallet interface built with Next.js, React, TypeScript, Tailwind CSS, and Solana Wallet Adapter. The app connects to a Solana wallet, displays the connected public address, fetches the wallet SOL balance, and prepares native SOL transfer transactions through the connected wallet.
+This project is designed as a portfolio and resume contribution project, with a clean foundation for adding production-grade Web3 features over time.
 
-## Preview
+![Next.js](https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=nextdotjs)
+![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=111111)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript&logoColor=ffffff)
+![Solana](https://img.shields.io/badge/Solana-Devnet-14F195?style=flat-square&logo=solana&logoColor=111111)
 
-Replace `public/screenshot.png` with your final project screenshot before publishing the repository or attaching it to your resume.
+## Screenshot
 
-![Solana Wallet DApp Screenshot](./public/screenshot.png)
+Add your project screenshot here:
+
+```md
+![Solana DApp Screenshot](./public/screenshot.png)
+```
+
+<!-- Replace this placeholder after adding your screenshot to public/screenshot.png -->
 
 ## Features
 
-- Wallet connect and disconnect flow using Solana Wallet Adapter UI.
-- Solana RPC connection through `ConnectionProvider`.
-- Public key display for the connected wallet.
-- SOL balance lookup using `connection.getBalance`.
-- Native SOL transfer transaction creation with `SystemProgram.transfer`.
-- Client-side signing flow through the connected wallet.
-- TypeScript-first Next.js App Router project structure.
-- Tailwind CSS 4 setup for styling.
+- Connect and disconnect a Solana wallet with `@solana/wallet-adapter-react`
+- Read SOL balance from Solana Devnet
+- Fetch SPL token accounts for the connected wallet
+- Display token balances with metadata and logo fallback support
+- Send SOL to another wallet address
+- Send SPL tokens and create the recipient associated token account when needed
+- Proxy token metadata through a Next.js API route with fallback token-list sources
+- Responsive interface built with Tailwind CSS
 
 ## Tech Stack
 
-| Area | Technology |
-| --- | --- |
-| Framework | Next.js 16 |
-| UI Library | React 19 |
-| Language | TypeScript |
-| Styling | Tailwind CSS 4 |
-| Blockchain | Solana |
-| Wallet Layer | `@solana/wallet-adapter-react`, `@solana/wallet-adapter-react-ui` |
-| Transaction SDK | `@solana/web3.js` |
-| Linting | ESLint 9 with Next.js Core Web Vitals config |
-| Package Manager | npm |
-
-## Architecture
-
-```mermaid
-flowchart TD
-    User[User Browser] --> UI[Next.js App Router UI]
-    UI --> WalletModal[Wallet Adapter UI]
-    WalletModal --> Wallet[Browser Wallet]
-    UI --> ConnectionProvider[Solana ConnectionProvider]
-    ConnectionProvider --> RPC[Helius Solana Mainnet RPC]
-    UI --> Portfolio[Portfolio Component]
-    Portfolio --> Balance[getBalance publicKey]
-    UI --> Send[Send Component]
-    Send --> Transaction[SystemProgram.transfer Transaction]
-    Transaction --> Wallet
-    Wallet --> Solana[Solana Network]
-```
-
-## Application Flow
-
-1. The app initializes a Solana RPC endpoint inside `ConnectionProvider`.
-2. `WalletProvider` exposes wallet state and transaction helpers to child components.
-3. `Topbar` renders either the connect button or disconnect button based on wallet state.
-4. `Portfolio` reads the connected public key and fetches the wallet balance.
-5. `Send` builds a native SOL transfer transaction and sends it through the connected wallet.
-
-## Project Structure
-
-```text
-dapp/
-├── app/
-│   ├── globals.css       # Tailwind CSS entrypoint
-│   ├── layout.tsx        # Root layout and font setup
-│   └── page.tsx          # Wallet providers, portfolio, and send flow
-├── public/
-│   ├── screenshot.png    # README preview image
-│   └── *.svg             # Static assets
-├── eslint.config.mjs     # ESLint configuration
-├── next.config.ts        # Next.js configuration
-├── package.json          # Scripts and dependencies
-├── tsconfig.json         # TypeScript configuration
-└── README.md
-```
+- **Framework:** Next.js App Router
+- **Language:** TypeScript
+- **UI:** React, Tailwind CSS
+- **Blockchain:** Solana Web3.js, SPL Token
+- **Wallets:** Solana Wallet Adapter
+- **Analytics:** Vercel Analytics
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js 18.18 or later
+- Node.js 20 or later
 - npm
-- A Solana browser wallet such as Phantom, Solflare, Backpack, or another wallet supported by the wallet adapter ecosystem
+- A Solana wallet configured for Devnet
 
 ### Installation
 
@@ -102,7 +59,7 @@ npm install
 npm run dev
 ```
 
-Open the local URL printed by Next.js, usually:
+Open the local development URL shown in your terminal, usually:
 
 ```text
 http://localhost:3000
@@ -115,95 +72,74 @@ npm run build
 npm run start
 ```
 
-### Linting
+## Project Structure
 
-```bash
-npm run lint
+```text
+app/
+  api/token/route.ts      Token metadata proxy route
+  layout.tsx              Root layout and analytics
+  page.tsx                Solana providers and page shell
+Comnponent/
+  Topbar.tsx              Wallet connect/disconnect navigation
+  portfolio.tsx           SOL and SPL token portfolio view
+  send.tsx                SOL and SPL token transfer form
+public/
+  *.svg                   Static assets
 ```
 
-## Configuration
+## How It Works
 
-The current RPC endpoint is configured in `app/page.tsx`:
-
-```ts
-const endpoint = "https://mainnet.helius-rpc.com/?api-key=...";
-```
-
-For production, move the RPC URL to an environment variable:
-
-```env
-NEXT_PUBLIC_SOLANA_RPC_URL="https://your-rpc-endpoint"
-```
-
-Then read it in the app:
-
-```ts
-const endpoint = process.env.NEXT_PUBLIC_SOLANA_RPC_URL!;
-```
+1. The app connects to Solana Devnet through `ConnectionProvider`.
+2. The user connects a wallet through the Solana Wallet Adapter modal.
+3. The portfolio component reads the wallet SOL balance and parsed SPL token accounts.
+4. Token metadata is loaded through the `/api/token` proxy route.
+5. The send form builds and submits either a native SOL transfer or an SPL token transfer transaction.
 
 ## Security Notes
 
-- Never commit private keys, seed phrases, or wallet files.
-- Use wallet-based signing only. The app should never request custody of user funds.
-- Keep RPC API keys out of source code for production deployments.
-- Prefer devnet while testing transfers.
-- Review transaction details before signing in the wallet.
-- Current transfer input is passed directly into `lamports`; convert SOL to lamports before using this in a production payment flow.
+- The app never asks for private keys or seed phrases.
+- Transactions are signed only through the connected wallet.
+- Test transfers on Devnet before adapting the project for Mainnet.
+- Review wallet prompts carefully before confirming any transaction.
+- Move configurable RPC endpoints into environment variables before production deployment.
 
-## Scripts
+## Resume Highlights
 
-| Command | Description |
-| --- | --- |
-| `npm run dev` | Start the local development server |
-| `npm run build` | Create an optimized production build |
-| `npm run start` | Run the production server |
-| `npm run lint` | Run ESLint checks |
+- Built a client-side Solana wallet dashboard using Next.js and TypeScript.
+- Integrated wallet connection, balance fetching, SPL token discovery, and transaction submission.
+- Implemented SPL token transfer support with associated token account creation.
+- Added a resilient token metadata proxy with multiple fallback sources.
+- Structured the project for future production improvements and portfolio presentation.
 
-## Roadmap
+## Future Plans
 
-- Add environment-based RPC configuration.
-- Add devnet/mainnet network selector.
-- Convert user-entered SOL values to lamports safely.
-- Add transaction confirmation status and explorer link.
-- Add form validation for wallet addresses and amounts.
-- Add toast notifications for success and error states.
-- Add unit tests for wallet-dependent UI states.
-- Improve layout and responsive styling for production use.
+- Add transaction history with Solana explorer links
+- Add better wallet and transaction error handling
+- Add mainnet/devnet network switching
+- Add token search and filtering
+- Improve token metadata caching
+- Add unit and integration tests for wallet and transaction flows
+- Add a polished screenshot and project demo GIF
+- Rename component folders and files for consistent casing
+- Add deployment instructions for Vercel
 
 ## Contributing
 
-Contributions are welcome. Please follow this workflow:
+Contributions are welcome. Good first improvements include UI cleanup, error handling, test coverage, token metadata reliability, and documentation updates.
 
-1. Fork the repository.
-2. Create a feature branch:
+To contribute:
 
-```bash
-git checkout -b feature/your-feature-name
-```
-
-3. Install dependencies and run the app locally:
-
-```bash
-npm install
-npm run dev
-```
-
-4. Run quality checks before opening a pull request:
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Run linting and build checks
+5. Open a pull request with a clear summary
 
 ```bash
 npm run lint
 npm run build
 ```
 
-5. Open a pull request with a clear description, screenshots for UI changes, and notes about any Solana transaction behavior.
-
-## Resume Highlights
-
-- Built a Solana wallet-enabled decentralized application using Next.js and TypeScript.
-- Integrated Solana Wallet Adapter for wallet connection, account state, and transaction signing.
-- Implemented balance fetching and native SOL transaction creation using Solana RPC and `@solana/web3.js`.
-- Structured the project with production-ready documentation, linting, and build scripts.
-
 ## License
 
-This project is currently private. Add a license such as MIT before publishing it as an open-source repository.
+This project is available for learning, portfolio, and contribution purposes. Add a license file before using it in a production or commercial setting.
